@@ -33,11 +33,48 @@ class GeneratorPlugin extends Plugin
         return [
             'onOutputRendered' => ['onOutputRendered', 0],
             'onPageInitialized' => ['onPageInitialized', 0],
+            'onPluginsInitialized' => ['onPluginsInitialized', 0],
         ];
+    }
+
+    private function dispatchActions($action) {
+      if ($action == 'refreshRoutes') {
+        foreach ($this->grav['pages']->routes() as $route => $folder) {
+          $uri = "http://" . $_SERVER['HTTP_HOST'] . $route;
+          $s = curl_init();
+          curl_setopt($s, CURLOPT_URL, $uri);
+          curl_setopt($s, CURLOPT_RETURNTRANSFER, true);
+          $a = curl_exec($s);
+          curl_close($s);
+        }
+      }
+    }
+
+    public function onPluginsInitialized()
+    {
+      if (!$this->isAdmin()) {
+        return;
+      }
+
+      $uri = $this->grav['uri'];
+      $route = $this->config->get('plugins.generator.route');
+
+      if ($route && $route == $uri->path())
+        $this->displayPluginPage = true;
     }
 
     public function onPageInitialized()
     {
+      // Display plugin panel
+      if ($this->displayPluginPage) {
+
+        if (isset($_GET['action']) && !empty($_GET['action']))
+          $this->dispatchActions($_GET['action']);
+
+        include('dashboard.html');
+        exit;
+      }
+
       // Trigerring refresh of cached page and parents on page save / editing
       if ($this->isAdmin()) {
 
