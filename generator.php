@@ -68,7 +68,7 @@ class GeneratorPlugin extends Plugin
     }
 
     private function dispatchActions($action) {
-      if ($action == 'refreshRoutes') {
+      if ($action == 'refreshRoutes' || $action == 'refreshAll') {
         foreach ($this->grav['pages']->routes() as $route => $folder) {
           $uri = "http://" . $_SERVER['HTTP_HOST'] . $route;
           $s = curl_init();
@@ -78,7 +78,7 @@ class GeneratorPlugin extends Plugin
           curl_close($s);
         }
       }
-      else if ($action == 'refreshAssets') {
+      else if ($action == 'refreshAssets' || $action == 'refreshAll') {
         rrmdir($this->config->get('plugins.generator.destination_folder') . "user/pages");
         rrmdir($this->config->get('plugins.generator.destination_folder') . "user/themes");
         rcopy("user/pages", $this->config->get('plugins.generator.destination_folder') . "user/pages");
