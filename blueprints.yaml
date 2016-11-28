@@ -1,0 +1,29 @@
+name: Generator
+version: 0.1.0
+description: Turn Grav into a Static Site Generator
+icon: plug
+author:
+  name: CTSD
+homepage: https://github.com/ctsd/grav-gassg
+keywords: grav, plugin, SSG, generator
+bugs: https://github.com/ctsd/grav-gassg/issues
+docs: https://github.com/ctsd/grav-gassg/README.md
+license: MIT
+
+form:
+  validation: strict
+  fields:
+    enabled:
+      type: toggle
+      label: Plugin status
+      highlight: 1
+      default: 0
+      options:
+        1: Enabled
+        0: Disabled
+      validate:
+        type: bool
+
+    destination_folder:
+      type: text
+      label: Chemin de destination des fichiers html
