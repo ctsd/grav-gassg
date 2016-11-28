@@ -9,6 +9,36 @@ use Grav\Common\Debugger;
 use Grav\Common\Taxonomy;
 use RocketTheme\Toolbox\Event\Event;
 
+function rcopy($source, $dest) {
+  mkdir($dest, 0755, true);
+  foreach (
+   $iterator = new \RecursiveIteratorIterator(
+    new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
+    \RecursiveIteratorIterator::SELF_FIRST) as $item
+  ) {
+    if ($item->isDir()) {
+      mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+    } else {
+      copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+    }
+  }
+}
+
+function rrmdir($dir) {
+  if (is_dir($dir)) {
+    $objects = scandir($dir);
+    foreach ($objects as $object) {
+      if ($object != "." && $object != "..") {
+        if (is_dir($dir."/".$object))
+          rrmdir($dir."/".$object);
+        else
+          unlink($dir."/".$object);
+      }
+    }
+    rmdir($dir);
+  }
+}
+
 /**
  * Class GeneratorPlugin
  * @package Grav\Plugin
@@ -47,6 +77,12 @@ class GeneratorPlugin extends Plugin
           $a = curl_exec($s);
           curl_close($s);
         }
+      }
+      else if ($action == 'refreshAssets') {
+        rrmdir($this->config->get('plugins.generator.destination_folder') . "user/pages");
+        rrmdir($this->config->get('plugins.generator.destination_folder') . "user/themes");
+        rcopy("user/pages", $this->config->get('plugins.generator.destination_folder') . "user/pages");
+        rcopy("user/themes", $this->config->get('plugins.generator.destination_folder') . "user/themes");
       }
     }
 
