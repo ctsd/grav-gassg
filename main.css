@@ -1,0 +1,59 @@
+body {
+  margin: 0;
+  background: #314d5b;
+  font-family: "Lato", "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+}
+.logo-container {
+  background: #1e333d;
+  padding: 20px;
+}
+.logo-container a {
+  color: #e6e6e6;
+}
+.logo-container a svg {
+  fill-rule: evenodd;
+  clip-rule: evenodd;
+  stroke-linejoin: round;
+  stroke-miterlimit: 1.41421;
+  fill: #e6e6e6;
+}
+.logo-container a svg path {
+  fill: rgba(255, 255, 255, 0.9) !important;
+}
+.updates {
+  background: #0092b6;
+  width: 95%;
+  max-width: 600px;
+  margin: 40px auto;
+}
+.updates .actions {
+  background: #0089ab;
+  text-align: right;
+  padding: 20px;
+}
+.updates .actions a {
+  background: #00a6cf;
+  color: #FFF;
+  border: 0;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 8px 15px;
+  margin: 0 10px;
+  font-weight: 300;
+  text-decoration: none;
+}
+.updates .actions a:last-child {
+  margin-right: 0;
+}
+.updates .logging {
+  padding: 20px;
+}
+.updates .logging h3 {
+  text-align: center;
+  color: #FFF;
+  font-size: 20px;
+  letter-spacing: 1px;
+}
+.updates .logging .log {
+  color: #FFF;
+}
