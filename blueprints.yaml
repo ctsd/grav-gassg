@@ -27,3 +27,7 @@ form:
     destination_folder:
       type: text
       label: Chemin de destination des fichiers html
+
+    destination_domain:
+      type: text
+      label: Domaine final des fichiers

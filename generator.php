@@ -177,7 +177,10 @@ class GeneratorPlugin extends Plugin
             $error = true;
         }
         if (!$error) {
-            @file_put_contents($filename, $this->grav->output . '<!-- Generated: ' . date('c') . ' -->');
+            $output = $this->grav->output;
+            $output = str_replace('http://' . $_SERVER['HTTP_HOST'], $this->config->get('plugins.generator.destination_domain'), $output);
+
+            @file_put_contents($filename, $output . '<!-- Generated: ' . date('c') . ' -->');
         }
     }
 
