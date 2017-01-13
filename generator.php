@@ -9,17 +9,28 @@ use Grav\Common\Debugger;
 use Grav\Common\Taxonomy;
 use RocketTheme\Toolbox\Event\Event;
 
-function rcopy($source, $dest) {
+function rcopy($source, $dest, $exclude = array()) {
   mkdir($dest, 0755, true);
   foreach (
    $iterator = new \RecursiveIteratorIterator(
     new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
     \RecursiveIteratorIterator::SELF_FIRST) as $item
   ) {
-    if ($item->isDir()) {
-      mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
-    } else {
-      copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+    $excluding = false;
+    $pathName = $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName();
+    foreach ($exclude as $word) {
+      if (strpos($pathName, $word) !== false) {
+        $excluding = true;
+        break;
+      }
+    }
+
+    if (!$excluding) {
+      if ($item->isDir()) {
+        mkdir($pathName);
+      } else {
+        copy($item, $pathName);
+      }
     }
   }
 }
@@ -79,10 +90,18 @@ class GeneratorPlugin extends Plugin
         }
       }
       else if ($action == 'refreshAssets' || $action == 'refreshAll') {
+
+        error_reporting(-1);
+        ini_set('display_errors', 'On');
+
+        $exclude = $this->config->get('plugins.generator.exclude');
+        $exclude = preg_replace("/\r\n|\r|\n/", ' ', $exclude);
+        $exclude = explode(' ', $exclude);
+
         rrmdir($this->config->get('plugins.generator.destination_folder') . "user/pages");
         rrmdir($this->config->get('plugins.generator.destination_folder') . "user/themes");
-        rcopy("user/pages", $this->config->get('plugins.generator.destination_folder') . "user/pages");
-        rcopy("user/themes", $this->config->get('plugins.generator.destination_folder') . "user/themes");
+        rcopy("user/pages", $this->config->get('plugins.generator.destination_folder') . "user/pages", $exclude);
+        rcopy("user/themes", $this->config->get('plugins.generator.destination_folder') . "user/themes", $exclude);
       }
     }
 

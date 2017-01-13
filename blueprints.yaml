@@ -31,3 +31,7 @@ form:
     destination_domain:
       type: text
       label: Domaine final des fichiers
+
+    exclude:
+      type: textarea
+      label: Folder names to exclude
