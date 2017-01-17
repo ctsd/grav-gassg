@@ -35,3 +35,7 @@ form:
     exclude:
       type: textarea
       label: Folder names to exclude
+
+    include:
+      type: textarea
+      label: Folder names to include

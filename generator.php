@@ -98,10 +98,18 @@ class GeneratorPlugin extends Plugin
         $exclude = preg_replace("/\r\n|\r|\n/", ' ', $exclude);
         $exclude = explode(' ', $exclude);
 
+        $include = $this->config->get('plugins.generator.include');
+        $include = preg_replace("/\r\n|\r|\n/", ' ', $include);
+        $include = explode(' ', $include);
+
         rrmdir($this->config->get('plugins.generator.destination_folder') . "user/pages");
         rrmdir($this->config->get('plugins.generator.destination_folder') . "user/themes");
         rcopy("user/pages", $this->config->get('plugins.generator.destination_folder') . "user/pages", $exclude);
         rcopy("user/themes", $this->config->get('plugins.generator.destination_folder') . "user/themes", $exclude);
+
+        foreach ($include as $folderName)
+          rcopy($folderName, $this->config->get('plugins.generator.destination_folder') . $folderName, []);
+
       }
     }
 
