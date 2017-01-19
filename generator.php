@@ -89,7 +89,7 @@ class GeneratorPlugin extends Plugin
           curl_close($s);
         }
       }
-      else if ($action == 'refreshAssets' || $action == 'refreshAll') {
+      if ($action == 'refreshAssets' || $action == 'refreshAll') {
 
         error_reporting(-1);
         ini_set('display_errors', 'On');
