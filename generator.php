@@ -10,7 +10,8 @@ use Grav\Common\Taxonomy;
 use RocketTheme\Toolbox\Event\Event;
 
 function rcopy($source, $dest, $exclude = array()) {
-  mkdir($dest, 0755, true);
+  if (!file_exists($dest))
+    mkdir($dest, 0755, true);
   foreach (
    $iterator = new \RecursiveIteratorIterator(
     new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
@@ -27,7 +28,8 @@ function rcopy($source, $dest, $exclude = array()) {
 
     if (!$excluding) {
       if ($item->isDir()) {
-        mkdir($pathName);
+        if (!file_exists($pathName))
+          mkdir($pathName);
       } else {
         copy($item, $pathName);
       }
