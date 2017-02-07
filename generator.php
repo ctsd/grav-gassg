@@ -52,6 +52,22 @@ function rrmdir($dir) {
   }
 }
 
+function rscan($dir, &$results = array()) {
+  $files = scandir($dir);
+
+  foreach($files as $key => $value){
+    $path = realpath($dir.DIRECTORY_SEPARATOR.$value);
+    if (!is_dir($path)) {
+      $results[] = $path;
+    }
+    else if ($value != "." && $value != "..") {
+      rscan($path, $results);
+    }
+  }
+
+  return $results;
+}
+
 /**
  * Class GeneratorPlugin
  * @package Grav\Plugin
@@ -112,6 +128,19 @@ class GeneratorPlugin extends Plugin
         foreach ($include as $folderName)
           rcopy($folderName, $this->config->get('plugins.generator.destination_folder') . $folderName, []);
 
+        // Generating cache manifest
+        $cacheManifest = $this->config->get('plugins.generator.cache_manifest');
+        if ($cacheManifest == 'on') {
+          $cacheManifestFile = $this->config->get('plugins.generator.destination_folder') . '/website.appcache';
+          $text = "CACHE MANIFEST\r\n";
+          $text .= "\r\n" . "# Generated on " . date('F d, Y') . " at " . date('H:i:s') . "\r\n\r\n";
+
+          $files = rscan($this->config->get('plugins.generator.destination_folder'));
+          foreach ($files as $f)
+            if (strpos($f, 'website.appcache') === false)
+              $text .= str_replace(realpath($this->config->get('plugins.generator.destination_folder')), '', $f) . "\r\n";
+          file_put_contents($cacheManifestFile, $text);
+        }
       }
     }
 

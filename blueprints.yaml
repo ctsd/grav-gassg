@@ -39,3 +39,11 @@ form:
     include:
       type: textarea
       label: Folder names to include
+
+    cache_manifest:
+      type: toggle
+      default: off
+      label: Generate a cache manifest file
+      options:
+        on: On
+        off: Off
