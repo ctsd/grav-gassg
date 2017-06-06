@@ -11,6 +11,6 @@ That version is thus quite protected from security hacks such as SQL or XSS inje
 Typically, let's say you are building your website under the domain name mysite.com .
 
 - You can create a subfolder /grav and install in there a Grav based website, theme it,... and protect it with a basic .htaccess to make sure you're the only one accessing it.
-- Install the plugin, set the options as destination_folder=../ and destination_domain=http://mysite.com .
+- Install the plugin, rename the plugin folder "generator", set the options as destination_folder=../ and destination_domain=http://mysite.com .
 - Generate the export from http://mysite.com/grav/admin/generator
 - Your website is publicly accessible from http://mysite.com
