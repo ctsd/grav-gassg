@@ -26,11 +26,11 @@ form:
 
     destination_folder:
       type: text
-      label: Chemin de destination des fichiers html
+      label: Destination folder
 
     destination_domain:
       type: text
-      label: Domaine final des fichiers
+      label: Destination domain
 
     exclude:
       type: textarea
